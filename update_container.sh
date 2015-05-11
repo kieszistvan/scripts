@@ -14,7 +14,8 @@ printf "${RED}>>> remove untagged images${NC}\n"
 docker rmi -f $(docker images | grep "<none>" | awk '{ print $3 }') || true
 
 printf "${RED}>>> fetch envars from consul${NC}\n"
-curl --silent http://consul.hashtagcharity.org:8500/v1/kv/lucy/$1/envars | jq ".[0].Value" | python -m base64 -d > $1.env
+MACHINE_ENV=$(curl --silent http://consul.hashtagcharity.org:8500/v1/kv/machines/$HOSTNAME/env | jq ".[0].Value" | python -m base64 -d)
+curl --silent http://consul.hashtagcharity.org:8500/v1/kv/$MACHINE_ENV/$1/envars | jq ".[0].Value" | python -m base64 -d > $1.env
 
 printf "${RED}>>> start container $1 and publish port 3000 on $3${NC}\n"
 docker run -d --name $1 -p $3:3000 --env-file=$1.env hashtagcharity/$1:$2
