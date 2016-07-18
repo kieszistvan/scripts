@@ -1,0 +1,18 @@
+#!/bin/bash
+
+case $1 in
+    on)
+        echo "127.0.0.1 www.facebook.com" | sudo tee -a /etc/hosts
+        echo "127.0.0.1 index.hu" | sudo tee -a /etc/hosts
+        echo "127.0.0.1 www.origo.hu" | sudo tee -a /etc/hosts
+        echo "127.0.0.1 444.hu" | sudo tee -a /etc/hosts
+        ;;
+    off)
+        sudo sed -i -e /"127.0.0.1 444.hu"/d /etc/hosts
+        sudo sed -i -e /"127.0.0.1 www.origo.hu"/d /etc/hosts
+        sudo sed -i -e /"127.0.0.1 index.hu"/d /etc/hosts
+        sudo sed -i -e /"127.0.0.1 www.facebook.com"/d /etc/hosts
+        ;;
+    *)    
+        echo "doggy afuera"
+esac
